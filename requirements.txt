@@ -1,0 +1,21 @@
+# Basic LangChain and LangGraph libraries
+langchain
+langgraph
+langchain_core
+
+# LLM and Embedding Providers
+openai
+python-dotenv
+
+# Vector Database (Qdrant)
+qdrant-client
+
+# User Interface and Helper Libraries
+rich
+tqdm
+
+# PDF Processing (for upsert_pdfs.py)
+pypdf2
+pdfplumber
+numpy
+tiktoken 

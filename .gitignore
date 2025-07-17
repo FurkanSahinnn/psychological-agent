@@ -1,0 +1,12 @@
+.env
+
+qdrant-embedder/
+
+__pycache__/
+*.pyc
+
+.cursor/
+
+venv/
+.venv/
+env/
