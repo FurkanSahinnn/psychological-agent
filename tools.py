@@ -3,10 +3,10 @@ from typing import List, Dict, Any
 from conf import embedding_client, qdrant_client, QDRANT_COLLECTION_NAME, EMBEDDING_MODEL
 
 @tool
-def search_psychology_knowledge_base(query: str, top_k: int = 8) -> List[Dict[str, Any]]:
+def search_psychology_knowledge_base(query: str) -> List[Dict[str, Any]]:
     """
     Searches the psychology knowledge base in Qdrant for the most relevant results for the user's psychology-related question.
-    Returns the top 'top_k' results.
+    Returns the top 8 results with document text, source title, and page number.
     """
     try:
         # Convert the user query to a vector using the embedding model
@@ -19,7 +19,7 @@ def search_psychology_knowledge_base(query: str, top_k: int = 8) -> List[Dict[st
         search_results = qdrant_client.search(
             collection_name=QDRANT_COLLECTION_NAME,
             query_vector=query_embedding,
-            limit=top_k,
+            limit=8,
             with_payload=True
         )
 
@@ -30,7 +30,7 @@ def search_psychology_knowledge_base(query: str, top_k: int = 8) -> List[Dict[st
                 formatted_results.append({
                     "score": result.score,
                     "document": result.payload.get("text", ""),
-                    "source": result.payload.get("source_title", "Bilinmeyen Kaynak"),
+                    "source": result.payload.get("source_title", "Unknown Source"),
                     "page": result.payload.get("page_number", 0)
                 })
         
@@ -39,6 +39,4 @@ def search_psychology_knowledge_base(query: str, top_k: int = 8) -> List[Dict[st
     except Exception as e:
         print(f"An error occurred while searching the knowledge base: {e}")
         return [{"error": "An error occurred while searching the knowledge base."}]
-# Add the search tool to the list. LangGraph will use this list.
-tools = [search_psychology_knowledge_base]
 

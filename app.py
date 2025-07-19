@@ -9,21 +9,35 @@ def ask_question():
     question = data.get('question', '')
     
     if not question:
-        return jsonify({"error": "Soru boş olamaz"}), 400
+        return jsonify({"error": "Question cannot be empty"}), 400
     
-    # Agent'i çalıştır
-    initial_state = AgentState(user_query=question, retrieved_documents=None, final_prompt=None, final_response=None)
-    events = psychology_agent.stream(initial_state)
+    print(f"📝 Question received: {question}")
     
-    final_response = ""
-    for event in events:
-        if "final_response" in event.get("generator", {}):
-            final_response = event["generator"]["final_response"]
+    # Simple state initialization
+    initial_state = AgentState(
+        user_query=question,
+        search_results=None,
+        final_response=None
+    )
     
-    return jsonify({
-        "question": question,
-        "answer": final_response
-    })
+    # Run the pipeline
+    try:
+        result = psychology_agent.invoke(initial_state)
+        final_response = result.get("final_response", "Sorry, I couldn't generate a response.")
+        
+        print(f"✅ Answer ready: {len(final_response)} characters")
+        
+        return jsonify({
+            "question": question,
+            "answer": final_response
+        })
+        
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return jsonify({
+            "question": question,
+            "answer": f"An error occurred: {str(e)}"
+        }), 500
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True) 

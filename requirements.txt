@@ -16,7 +16,6 @@ tqdm
 
 # Flask API
 flask
-flask-cors
 
 # PDF Processing (for upsert_pdfs.py)
 pypdf2
