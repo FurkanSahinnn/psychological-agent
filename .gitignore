@@ -10,3 +10,9 @@ __pycache__/
 venv/
 .venv/
 env/
+
+notes.txt
+test.ipynb
+
+.idea/
+*.iml
